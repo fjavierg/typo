@@ -41,12 +41,46 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+  User.create!({:login => 'publisher',
+                :password => 'bbbbbbbb',
+                :email => 'joe2@snow.com',
+                :profile_id => 2,
+                :name => 'publisher',
+                :state => 'active'})
+end
+
+And /the following articles exist/ do |articles_table|
+  articles_table.hashes.each do |article|
+    # each returned element will be a hash whose key is the table header.
+    # you should arrange to add that movie to the database here.
+	user=User.where("login='publisher'")
+	tmp = Article.new
+	tmp.title = article['title']
+	tmp.type = article['type']
+	tmp.user = user[0]
+	tmp.published = article['published']
+	tmp.body = article['body']
+	tmp.save!
+  end
+
 end
 
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
   fill_in 'user_login', :with => 'admin'
   fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+And /^I am logged into the publisher panel$/ do
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'publisher'
+  fill_in 'user_password', :with => 'bbbbbbbb'
   click_button 'Login'
   if page.respond_to? :should
     page.should have_content('Login successful')
@@ -125,6 +159,29 @@ end
 When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
   attach_file(field, File.expand_path(path))
 end
+
+When /^(?:|I )view article "([^"]*)"$/ do |title|
+  article=Article.where("title= ?", title)
+  path = "the view article " + article[0].id.to_s  + " page"
+  visit path_to(path)
+end
+
+
+When /^(?:|I )edit article "([^"]*)"$/ do |title|
+  article=Article.where("title= ?", title)
+  path="the edit article " + article[0].id.to_s + " page"
+  visit path_to(path)
+end
+
+When /^(?:|I )merge articles "([^"]*)" and "([^"]*)"$/ do |title, merge|
+  article=Article.where("title= ?", title)
+  merge=Article.where("title= ?", merge)
+  path="the edit article " + article[0].id.to_s + " page"
+  visit path_to(path)
+  fill_in 'merge', :with => merge[0].id
+  click_button 'Merge'
+end
+
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
   if page.respond_to? :should

@@ -147,6 +147,13 @@
       <%= render 'admin/content/attachment', { :attachment_num => 1, :hidden => false } -%>
     </ul>
   </div>    
+
+  <div class=''>
+    <h4><%= Merge Articles %></h4>
+     <div class='class'>
+      <%= text_field 'article', 'merge_with', {:autocomplete => 'off', :style => 'width: 100'} %>
+    </div>
+  </div> 
   </div>
 
 </div>
