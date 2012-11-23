@@ -4,3 +4,14 @@
   <%= render :partial => "form" %>
 
 <% end %>
+
+
+<%= form_tag({ :action => "merge", :id => @article.id }, :id => "#{form_type}_form", :enctype => "multipart/form-data") do %>
+ <div class=''>
+    <h4><%= _("Merge Articles") %></h4>
+	  <input id='merge_with' type="text" value="1" name="merge_with"  />
+	<div class='actions'>
+      <input id='merge' type="submit" value="<%= _('Merge') %>" name="merge" class='btn info' />
+    </div>
+  </div> 
+ <% end %>

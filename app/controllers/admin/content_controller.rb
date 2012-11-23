@@ -37,6 +37,18 @@ class Admin::ContentController < Admin::BaseController
     new_or_edit
   end
 
+  def merge
+      @article = Article.find(params[:id])
+    unless current_user.profile_id==1
+      redirect_to :action => 'index'
+      flash[:error] = _("Error, you are not allowed to perform this action")
+      return
+    end
+    @article.merge(params[:merge_with])
+    flash[:notice] = _("This article was deleted successfully")
+    redirect_to :action => 'edit',:id => params[:id]
+  end
+  
   def destroy
     @record = Article.find(params[:id])
 
@@ -240,4 +252,5 @@ class Admin::ContentController < Admin::BaseController
   def setup_resources
     @resources = Resource.by_created_at
   end
+  
 end

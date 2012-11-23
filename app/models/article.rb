@@ -466,4 +466,9 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
+
+  def merge (id = nil)
+    article_to_merge = Article.find(id)
+	return
+  end
 end
