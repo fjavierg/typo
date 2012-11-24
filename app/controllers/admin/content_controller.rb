@@ -34,6 +34,7 @@ class Admin::ContentController < Admin::BaseController
       flash[:error] = _("Error, you are not allowed to perform this action")
       return
     end
+	@profile = current_user.profile_id
     new_or_edit
   end
 
