@@ -423,6 +423,7 @@ class Article < Content
 		comment.article = self
 		comment.save!
 	end
+	article_to_merge.destroy
 	return
   end
   
