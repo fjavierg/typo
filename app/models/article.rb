@@ -469,6 +469,11 @@ class Article < Content
 
   def merge (id = nil)
     article_to_merge = Article.find(id)
+	self.body = self.body + article_to_merge.body
+	article_to_merge.comments.each do |comment|
+		comment.article = self
+		comment.save!
+	end
 	return
   end
 end
