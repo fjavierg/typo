@@ -46,7 +46,6 @@ class Admin::ContentController < Admin::BaseController
       return
     end
     @article.merge(params[:merge_with])
-	@article.save
     flash[:notice] = _("This article was merged successfully")
     redirect_to :action => 'edit',:id => params[:id]
   end
